@@ -18,8 +18,8 @@ class Figure {
   
   /* Variables that control the presentation of the figure */
   /* Unused: It will be only used on solid rendering */
-  private color firstColor;
-  private color secondColor;
+  private color[] solidColors;
+  
   /* Inner radious of the Torus (ring) inside which we arrange the vertex in a cycle */
   private float innerRadius;
   /* Outer radious of the same */
@@ -42,22 +42,22 @@ class Figure {
      Courrently the first and second color are the same 
   */
   public void render() {
-    stroke(this.secondColor);
+    
     for (int i = 0; i < size; ++i) {
       this.edges[i].render();
     }
-    stroke(this.firstColor);
+    
     for (int i = 0; i < order; ++i) {
       this.vertexes[i].render();
     }
   }
   
   public void renderAsGraph() {
-    stroke(this.secondColor);
+    stroke(this.solidColors[0]);
     for (int i = 0; i < size; ++i) {
       this.edges[i].renderAsGraph();
     }
-    stroke(this.firstColor);
+    
     for (int i = 0; i < order; ++i) {
       this.vertexes[i].renderAsGraph();
     }
@@ -67,16 +67,16 @@ class Figure {
     //Calculate three colors
     color c[] = new color[3];
     colorMode(RGB, 1.0);
-    c[0] = this.firstColor;
+    c[0] = this.solidColors[0];
     float redC = red(c[0]);
     float greenC = green(c[0]);
     float blueC = blue(c[0]);
     //Only one color available
-    if (this.firstColor == this.secondColor) {  
+    if (this.solidColors[0] == this.solidColors[1]) {  
       c[1] = color(0.66 * redC, 0.66 * greenC, 0.66 * blueC);
       c[2] = color(0.33 * redC, 0.33 * greenC, 0.33 * blueC);
     } else { //Two colors available
-      c[1] = this.secondColor;
+      c[1] = this.solidColors[2];
       c[2] = color(0.5 * redC, 0.5 * greenC, 0.5 * blueC);  
     }
     //Now I need to walk all the edges, draw two polygons at each
@@ -126,8 +126,8 @@ class Figure {
     
     this.adjacenceMatrix = new boolean[this.order][this.order];
     /* Default color, radious and position */
-    this.firstColor = color(255, 255, 255);
-    this.secondColor = color(255, 255, 255);
+    this.solidColors = new color[3];
+    this.solidColors[0] = color(255, 255, 255);
     this.outterRadius = 100.0f;
     this.innerRadius = 0.60 * this.outterRadius;
     this.orientationAngle = 0.0f;
@@ -148,22 +148,31 @@ class Figure {
   
   /* Setters and getters */
   
-  /* Get the first color */
-  public color getFirstColor() {
-    return this.firstColor;
+  /* Get the color */
+  public color getFirstColor(int index) {
+    if (index < 0 || index >= 3) {
+      println("Requested an ilegal color index");
+      return color(0);
+    }
+    return this.solidColors[index];
   }
-  /* Set the first color */
-  public void setFirstColor(color c) {
+  /* Set the colors using one color */
+  public void setOneColor(color c) {
+      colorMode(RGB, 1.0);
+      this.solidColors[0] = c;
       this.firstColor = c;
   }
-  /* Get the seccond color */
-  public color getSecondColor() {
-    return this.secondColor;
-  }
-  /* Set the seccond color */
-  public void setSecondColor(color c) {  
+  /* Set the colors using two colors */
+  public void setTwoColors(color c_1, color c_2) {  
       this.secondColor = c;    
   }
+  /* Set the colors using three colors */
+  public void setThreeColors(color c_1, color c_2, color c_3) {  
+      this.solidColors[0] = c_1;
+      this.solidColors[1] = c_2;
+      this.solidColors[2] = c_3;
+  }
+  
   /* Get the coordinates of the center of the Figure */
   public PVector getPosition() {
     return this.position.copy();
