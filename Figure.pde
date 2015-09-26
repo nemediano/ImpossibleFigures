@@ -42,13 +42,13 @@ class Figure {
      Courrently the first and second color are the same 
   */
   public void render() {
-    
+    stroke(this.solidColors[0]);
     for (int i = 0; i < size; ++i) {
       this.edges[i].render();
     }
     
     for (int i = 0; i < order; ++i) {
-      this.vertexes[i].render();
+     this.vertexes[i].render();
     }
   }
   
@@ -64,27 +64,13 @@ class Figure {
   }
   
   public void renderSolid() {
-    //Calculate three colors
-    color c[] = new color[3];
-    colorMode(RGB, 1.0);
-    c[0] = this.solidColors[0];
-    float redC = red(c[0]);
-    float greenC = green(c[0]);
-    float blueC = blue(c[0]);
-    //Only one color available
-    if (this.solidColors[0] == this.solidColors[1]) {  
-      c[1] = color(0.66 * redC, 0.66 * greenC, 0.66 * blueC);
-      c[2] = color(0.33 * redC, 0.33 * greenC, 0.33 * blueC);
-    } else { //Two colors available
-      c[1] = this.solidColors[2];
-      c[2] = color(0.5 * redC, 0.5 * greenC, 0.5 * blueC);  
-    }
+    //Factor out the three colors calculation
     //Now I need to walk all the edges, draw two polygons at each
     //Edge, and change the color on certain transitions.
     //Need to discover the transitions rules.
-    color out = c[0];
-    color in = c[1];
-    color unused = c[2];
+    color out = this.solidColors[0];
+    color in = this.solidColors[1];
+    color unused = this.solidColors[2];
     for (int i = 0; i < this.size; ++i) {
       int secondType = this.edges[i].getSecond().getType();
       this.edges[i].renderSolid(out, in);
@@ -127,7 +113,7 @@ class Figure {
     this.adjacenceMatrix = new boolean[this.order][this.order];
     /* Default color, radious and position */
     this.solidColors = new color[3];
-    this.solidColors[0] = color(255, 255, 255);
+    this.setOneColor(color(255, 255, 255));
     this.outterRadius = 100.0f;
     this.innerRadius = 0.60 * this.outterRadius;
     this.orientationAngle = 0.0f;
@@ -160,11 +146,20 @@ class Figure {
   public void setOneColor(color c) {
       colorMode(RGB, 1.0);
       this.solidColors[0] = c;
-      this.firstColor = c;
+      float redC = red(c);
+      float greenC = green(c);
+      float blueC = blue(c);
+      //Calculate the other two colors linear interpolating
+      this.solidColors[1] = color(0.66 * redC, 0.66 * greenC, 0.66 * blueC);
+      this.solidColors[2] = color(0.33 * redC, 0.33 * greenC, 0.33 * blueC);
   }
   /* Set the colors using two colors */
   public void setTwoColors(color c_1, color c_2) {  
-      this.secondColor = c;    
+      colorMode(RGB, 1.0);
+      this.solidColors[0] = c_1;
+      this.solidColors[2] = c_2;
+      //Calculate the missing color linear interpolating
+      this.solidColors[1] = color((red(c_1) + red(c_2)) / 2, (green(c_1) + green(c_2)) / 2, (blue(c_1) + blue(c_2)) / 2);
   }
   /* Set the colors using three colors */
   public void setThreeColors(color c_1, color c_2, color c_3) {  
