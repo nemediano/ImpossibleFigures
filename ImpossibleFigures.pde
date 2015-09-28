@@ -2,7 +2,8 @@ Figure testFigure[];
 Figure jorge;
 int customType;
 boolean single;
-int renderType;
+boolean graph;
+boolean contour;
 float customRadius;
 
 void setup () {
@@ -13,7 +14,8 @@ void setup () {
   ellipseMode(RADIUS);
   recreateFigures();
   single = true;
-  renderType = 0;
+  graph = false;
+  contour = false;
   customType = 0;
   customRadius = 50.0;
 }
@@ -21,17 +23,15 @@ void setup () {
 void draw () {
    background(0.15);
    if (single) {
-     switch(renderType) {
-       case 0:
-       jorge.render();
-       break;
-       case 1:
-       jorge.renderAsGraph();
-       break;
-       case 2:
-       jorge.renderSolid();
-       break;
-     }
+      if (graph) {
+        jorge.renderAsGraph();
+      } else {
+         jorge.renderSolid();
+         if (contour) {
+           stroke(color(255, 255, 255));
+           jorge.render();
+         }
+      }
    } else {
      for (int i = 0; i < testFigure.length; i++) {
        testFigure[i].render();
@@ -79,7 +79,8 @@ void keyPressed() {
     customRadius += 10.0;
     jorge.changeVertexRadius(2, customRadius);
   } else if (key == 'g' || key == 'G') {
-    renderType++;
-    renderType %= 3;
+    graph = (!graph);
+  } else if (key == 'c' || key == 'C') {
+    contour = (!contour);
   }
 }

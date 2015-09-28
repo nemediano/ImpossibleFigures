@@ -42,7 +42,7 @@ class Figure {
      Courrently the first and second color are the same 
   */
   public void render() {
-    stroke(this.solidColors[0]);
+    stroke(color(255, 255, 255));
     for (int i = 0; i < size; ++i) {
       this.edges[i].render();
     }
