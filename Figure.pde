@@ -50,6 +50,7 @@ class Figure {
     for (int i = 0; i < order; ++i) {
      this.vertexes[i].render();
     }
+    //this.vertexes[2].renderPoints();
   }
   
   public void renderAsGraph() {
@@ -68,12 +69,17 @@ class Figure {
     //Now I need to walk all the edges, draw two polygons at each
     //Edge, and change the color on certain transitions.
     //Need to discover the transitions rules.
+    
+    //Temporary for debug
+    this.setOneColor(color(0, 255, 0));
     color out = this.solidColors[0];
     color in = this.solidColors[1];
     color unused = this.solidColors[2];
+    
+    
     for (int i = 0; i < this.size; ++i) {
       int secondType = this.edges[i].getSecond().getType();
-      this.edges[i].renderSolid(out, in);
+      this.edges[i].renderSolid(in, unused);
       //Determine if we change color according to type
       switch (secondType) {
         //Make swaping of the colors using 

@@ -87,12 +87,78 @@ class Invariables {
     PVector v_2 = PVector.add(PVector.mult(direction, -10.0), p_2);
     v_1.add( 5.0 * direction.y, -5.0 * direction.x, 0.0);
     v_2.add(-5.0 * direction.y,  5.0 * direction.x, 0.0);
-    
+    fill(255, 255, 255);
     triangle(v_1.x, v_1.y, v_2.x, v_2.y, p_2.x, p_2.y);
+    noFill();
   }
   
   public void renderSolid(color outColor, color inColor) {
+    /* To store the two end points of the upper figure */
+    PVector poly_up_left[] = new PVector[2];
+    PVector poly_down_left[] = new PVector[2];
+    PVector poly_up_right[] = new PVector[2];
+    PVector poly_down_right[] = new PVector[2];
     
+    /* According to this type, get the three endpoints */
+    switch(this.first.getType()) {
+      case 0:
+      case 1:
+        poly_up_left[0] = this.first.getIntersection(2, 2);
+        poly_up_left[1] = this.first.getIntersection(1, 1);
+        poly_down_left[0] = this.first.getIntersection(1, 1);
+        poly_down_left[1] = this.first.getIntersection(0, 0);
+      break;
+      
+      case 2:
+        poly_up_left[0] = this.first.getIntersection(1, 2);
+        poly_up_left[1] = this.first.getIntersection(2, 1);
+        poly_down_left[0] = this.first.getIntersection(2, 1);
+        poly_down_left[1] = this.first.getIntersection(2, 0);
+      break;
+      
+      case 3:
+        poly_up_left[0] = this.first.getIntersection(0, 2);
+        poly_up_left[1] = this.first.getIntersection(0, 1);
+        poly_down_left[0] = this.first.getIntersection(0, 1);
+        poly_down_left[1] = this.first.getIntersection(0, 0);
+      break;
+    }
+    /* Same with the second variable*/
+    switch(this.second.getType()) {
+      case 0:
+      case 1:  
+        poly_up_right[0] = this.second.getIntersection(2, 2);
+        poly_up_right[1] = this.second.getIntersection(1, 1);
+        poly_down_right[0] = this.second.getIntersection(1, 1);
+        poly_down_right[1] = this.second.getIntersection(0, 0);
+      break;
+      
+      case 2:
+        poly_up_right[0] = this.second.getIntersection(2, 0);
+        poly_up_right[1] = this.second.getIntersection(1, 0);
+        poly_down_right[0] = this.second.getIntersection(1, 0);
+        poly_down_right[1] = this.second.getIntersection(0, 0);
+      break;
+      
+      case 3:
+        poly_up_right[0] = this.second.getIntersection(2, 1);
+        poly_up_right[1] = this.second.getIntersection(1, 2);
+        poly_down_right[0] = this.second.getIntersection(1, 2);
+        poly_down_right[1] = this.second.getIntersection(0, 2);
+      break;
+    }
+    /* Now that you have the four endpoints. 
+     For each polygon draw the polygons */
+      noStroke();
+      fill(outColor);
+      //stroke(255, 0, 0);
+      quad(poly_up_left[0].x, poly_up_left[0].y, poly_up_left[1].x, poly_up_left[1].y,  //<>//
+           poly_up_right[1].x, poly_up_right[1].y, poly_up_right[0].x, poly_up_right[0].y);
+      fill(inColor);
+      //stroke(255, 0, 0);
+      quad(poly_down_left[0].x, poly_down_left[0].y, poly_down_left[1].x, poly_down_left[1].y, 
+           poly_down_right[1].x, poly_down_right[1].y, poly_down_right[0].x, poly_down_right[0].y);
+      noFill();    
   }
   
   public Variable getFirst() {

@@ -2,30 +2,35 @@ Figure testFigure[];
 Figure jorge;
 int customType;
 boolean single;
-boolean graph;
+int renderType;
 float customRadius;
 
 void setup () {
-  size(800, 800);
-  background(0);
+  size(512, 512);
   noFill();
   smooth(8);
   /* Change to radious mode is easier for us to make calculations on it */
   ellipseMode(RADIUS);
   recreateFigures();
   single = true;
-  graph = false;
+  renderType = 0;
   customType = 0;
   customRadius = 50.0;
 }
 
 void draw () {
-   background(0);
+   background(0.15);
    if (single) {
-     if (graph) {
-        jorge.renderAsGraph();
-     } else { 
-        jorge.render();
+     switch(renderType) {
+       case 0:
+       jorge.render();
+       break;
+       case 1:
+       jorge.renderAsGraph();
+       break;
+       case 2:
+       jorge.renderSolid();
+       break;
      }
    } else {
      for (int i = 0; i < testFigure.length; i++) {
@@ -36,10 +41,11 @@ void draw () {
 
 void recreateFigures() {
   jorge = new  Figure(4);
-  jorge.setPosition(new PVector(400, 400));
-  jorge.setInnerRadio(200);
-  jorge.setOutterRadio(300);
-  jorge.moveVertex(2, new PVector(400, 350));
+  jorge.setPosition(new PVector(width / 2, height / 2));
+  float diameter = max(width, height);
+  jorge.setInnerRadio(diameter / 6);
+  jorge.setOutterRadio(diameter / 3);
+  //jorge.moveVertex(2, new PVector(width / 2, height / 7));
   
   testFigure = new Figure[4];
   for (int i = 0; i < testFigure.length; i++) {
@@ -73,6 +79,7 @@ void keyPressed() {
     customRadius += 10.0;
     jorge.changeVertexRadius(2, customRadius);
   } else if (key == 'g' || key == 'G') {
-    graph = (!graph);
+    renderType++;
+    renderType %= 3;
   }
 }
