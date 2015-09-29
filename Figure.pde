@@ -71,7 +71,6 @@ class Figure {
     //Need to discover the transitions rules.
     
     //Temporary for debug
-    this.setOneColor(color(0, 255, 0));
     color out = this.solidColors[0];
     color in = this.solidColors[1];
     color unused = this.solidColors[2];
@@ -85,15 +84,37 @@ class Figure {
         //Make swaping of the colors using 
         //The type of the second variable
         case 0:
+          /*Swap out and unused*/
+          color tmp = unused;
+          unused = out;
+          out = tmp;
         break;
         
         case 1:
+          /*Swap in and unused*/
+          tmp = unused;
+          unused = in;
+          in = tmp;
         break;
         
         case 2:
+          /* Out becomes in.
+             in is unused
+             new out is prevois unused */
+          tmp = in;
+          in = out;
+          out = unused;
+          unused = tmp;
         break;
         
         case 3:
+          /* Out becomes unused.
+             in becomes out
+             unuses is prevoius out */
+          tmp = out;
+          out = in;
+          in = unused;
+          unused = tmp;
         break;
       }
     }
