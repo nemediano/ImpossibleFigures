@@ -65,60 +65,24 @@ class Figure {
   }
   
   public void renderSolid() {
-    //Factor out the three colors calculation
-    //Now I need to walk all the edges, draw two polygons at each
-    //Edge, and change the color on certain transitions.
-    //Need to discover the transitions rules.
-    
-    //Temporary for debug
-    color out = this.solidColors[0];
-    color in = this.solidColors[1];
-    color unused = this.solidColors[2];
-    
+    /* Change in strategy: 
+      Now I assign symbolic color to each of the edges. 
+      After the assignation I use the symbolic colors
+      for making the actual coloring */
     
     for (int i = 0; i < this.size; ++i) {
-      int secondType = this.edges[i].getSecond().getType();
-      this.edges[i].renderSolid(in, unused);
-      //Determine if we change color according to type
-      switch (secondType) {
-        //Make swaping of the colors using 
-        //The type of the second variable
-        case 0:
-          /*Swap out and unused*/
-          color tmp = unused;
-          unused = out;
-          out = tmp;
-        break;
-        
-        case 1:
-          /*Swap in and unused*/
-          tmp = unused;
-          unused = in;
-          in = tmp;
-        break;
-        
-        case 2:
-          /* Out becomes in.
-             in is unused
-             new out is prevois unused */
-          tmp = in;
-          in = out;
-          out = unused;
-          unused = tmp;
-        break;
-        
-        case 3:
-          /* Out becomes unused.
-             in becomes out
-             unuses is prevoius out */
-          tmp = out;
-          out = in;
-          in = unused;
-          unused = tmp;
-        break;
-      }
+      color in = this.solidColors[this.edges[i].getInColor() - 1];
+      color out = this.solidColors[this.edges[i].getOutColor() - 1];
+      this.edges[i].renderSolid(out, in);
     }
     
+  }
+  
+  private void assignColors() {
+    for (int i = 0; i < this.size; ++i) {
+      this.edges[i].setInColor(1);
+      this.edges[i].setOutColor(2);
+    }
   }
   
   /* 
@@ -157,6 +121,9 @@ class Figure {
     for (int i = 0; i < this.size; ++i) {
       intersectionPoints(i);
     }
+    
+    /* Assign the symbolic colors */
+    this.assignColors();
   }
   
   /* Setters and getters */
@@ -475,6 +442,7 @@ class Figure {
     /* Change the vertex type */
     if (type != this.vertexes[index].getType()) {
       this.vertexes[index].setType(type);
+      this.assignColors();
     }
   }
   

@@ -7,6 +7,10 @@ class Invariables {
   /*The two Variables this Invariable join */
   private Variable first;
   private Variable second;
+  /* Color type (0, 1, 2, 3) for the inner and outer part of the Invariable 
+    0 is reserve to an unasigned color (transparent or the color of background) */
+  private int colorOut;
+  private int colorIn;
   
   /* 
      The most impostnat methos of this class. It renders the three paralell lines.
@@ -185,6 +189,10 @@ class Invariables {
     } else {
       println("Attempt to assign a null vertex to an edge!");
     }
+    
+    /* Defult symbol for the color is 0 (unasigned)*/
+    this.colorIn = 0;
+    this.colorOut = 0;
   }
   
   /* 
@@ -200,5 +208,43 @@ class Invariables {
     stroke(0, 255, 255);
     ellipse(pSecond.x, pSecond.y, 10, 10);
   }
+ 
+  /* 
+    This set the type of color for the inner part 
+    of the invariable. Remember is just a simbol not the actual color
+   */
+  public void setInColor(int type) {
+    if (type > 0 && type <= 3) {
+      this.colorIn = type;
+    } else {
+      println("Invalid type assignation for this variable");
+    }
+  }
   
+  /* 
+    Returns the type of color for the inner part 
+    of the invariable.
+   */
+  public int getInColor() {
+    return this.colorIn;
+  }
+   
+  /* 
+    This set the type of color for the outer part 
+    of the invariable. Remember is just a simbol not the actual color
+   */
+  public void setOutColor(int type) {
+    if (type > 0 && type <= 3) {
+      this.colorOut = type;
+    } else {
+      println("Invalid type assignation for this variable");
+    }
+  }
+   /* 
+    Returns the type of color for the inner part 
+    of the invariable.
+   */
+  public int getOutColor() {
+    return this.colorOut;
+  }
 }

@@ -40,12 +40,17 @@ void draw () {
 }
 
 void recreateFigures() {
-  jorge = new  Figure(6);
+  jorge = new  Figure(4);
   jorge.setPosition(new PVector(width / 2, height / 2));
   float diameter = max(width, height);
   jorge.setInnerRadio(diameter / 6);
   jorge.setOutterRadio(diameter / 3);
   jorge.setTwoColors(color(255, 0, 0), color(255, 255, 0));
+  jorge.changeVertexType(0, 0);
+  jorge.changeVertexType(1, 0);
+  jorge.changeVertexType(2, 0);
+  jorge.changeVertexType(3, 0);
+  
   //jorge.moveVertex(2, new PVector(width / 2, height / 7));
   
   testFigure = new Figure[4];
