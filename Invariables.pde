@@ -222,6 +222,22 @@ class Invariables {
   }
   
   /* 
+    This unset (mark as no color) the type of color for the inner part 
+    of the invariable.
+   */
+   public void removeInColor() {
+     this.colorIn = 0;
+   }
+   
+   /* 
+    This unset (mark as no color) the type of color for the outer part 
+    of the invariable.
+   */
+   public void removeOutColor() {
+     this.colorOut = 0;
+   }
+  
+  /* 
     Returns the type of color for the inner part 
     of the invariable.
    */
