@@ -77,12 +77,54 @@ class Figure {
     }
     
   }
-  
+  /* 
+    Assign color to the section of the figure. Needs to be called 
+    each time a vertex change his type
+  */
   private void assignColors() {
     for (int i = 0; i < this.size; ++i) {
       this.edges[i].setInColor(1);
-      this.edges[i].setOutColor(2);
+      this.edges[i].setOutColor((i % 2) + 2);
     }
+    
+    int currentVertex = 0;
+    this.edges[currentVertex].setOutColor(1);
+    while (this.hasUnasigned()) {
+      int before = ((currentVertex - 1) + this.size) % this.size;
+      int after = currentVertex;
+      
+      switch(this.vertexes[currentVertex].getType()) {
+        case 0:
+        break;
+        
+        case 1:
+        break;
+        
+        case 2:
+        break;
+        
+        case 3:
+        break;
+      }
+      
+      //Move to the next vertex
+      currentVertex++;
+      currentVertex %= this.order;
+    }
+  }
+  
+  /* 
+    Check if we have an edge with unasigned color
+  */
+  
+  private boolean hasUnasigned() {
+    for (int i = 0; i < this.size; ++i) {
+      if (this.edges[i].getInColor() == 0 ||
+          this.edges[i].getOutColor() == 0) {
+            return true;
+      }
+    }
+    return false;
   }
   
   /* 
